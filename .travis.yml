@@ -9,7 +9,7 @@ install:
 
 # command to run tests
 script: 
-  - python3 -m pytest --cov=app
+  - python3 -m pytest --cov
 
 after_success:
   - coveralls
