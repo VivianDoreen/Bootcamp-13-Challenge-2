@@ -30,7 +30,7 @@ class MyTestCase(unittest.TestCase):
     def test_index(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.data.decode()), {"Hello Adimin":"Welcome to ManagerStore"})
+        self.assertEqual(json.loads(response.data.decode()), {"Hello Admin":"Welcome to ManagerStore"})
    
     def test_unavailable_fetch(self):
         result = self.client.get('/api/v1/products/')
