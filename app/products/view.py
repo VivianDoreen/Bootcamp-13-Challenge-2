@@ -7,7 +7,7 @@ from app import handle_errors
 @app.route('/')
 def index():
     """This is the welcome page"""
-    return jsonify({"Hello Adimin":"Welcome to ManagerStore"})
+    return jsonify({"Hello Admin":"Welcome to ManagerStore"})
 
 @app.route('/api/v1/products', methods=['GET'])
 def get_products():
