@@ -3,6 +3,8 @@ from flask import jsonify, request, abort, make_response
 from app import app
 from app.products.model import Product
 from app import handle_errors
+import jwt
+import datetime
 
 @app.route('/')
 def index():
@@ -26,10 +28,19 @@ def create_product():
     """This methods creates a new product record"""
     if not request.json or not 'product_name' in request.json or not 'pdt_category' in request.json or not 'pdt_description' in request.json:
         abort(400)
-    new_product = request.get_json() or {}
-    new_product_return = Product.add_product(new_product['product_name'],
-                                             new_product['pdt_description'],
-                                             new_product['pdt_category'])
+    # new_product = request.get_json() or {}
+    # new_product_return = Product.add_product(new_product['product_name'],
+    #                                          new_product['pdt_description'],
+    #                                          new_product['pdt_category'])
+    product_name = request.json['product_name']
+    pdt_description = request.json['pdt_description']
+    pdt_category = request.json['pdt_category']
+    if product_name == "" or pdt_description == "" or pdt_category == "":
+        return "Everyfield is mandatory*"
+    new_product_return = Product.add_product(product_name,
+                                             pdt_description,
+                                             pdt_category
+                                             )
     if new_product_return == "Product already exists":
         return jsonify({403 : new_product_return}), 403
     return jsonify({201: 'Product successfully added'}), 201
