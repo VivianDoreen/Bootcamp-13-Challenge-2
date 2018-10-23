@@ -3,11 +3,14 @@ from flask import jsonify, request, abort, make_response
 from app import app
 from app.products.model import Product
 from app import handle_errors
+import jwt
+import datetime
+from cerberus import Validator
 
 @app.route('/')
 def index():
     """This is the welcome page"""
-    return jsonify({"Hello Adimin":"Welcome to ManagerStore"})
+    return jsonify({"Hello Admin":"Welcome to ManagerStore"})
 
 @app.route('/api/v1/products', methods=['GET'])
 def get_products():
@@ -27,9 +30,33 @@ def create_product():
     if not request.json or not 'product_name' in request.json or not 'pdt_category' in request.json or not 'pdt_description' in request.json:
         abort(400)
     new_product = request.get_json() or {}
+
+    schema = {
+            'product_name': {'required': True, 'type': 'string','empty': False, 'minlength':2},
+            'pdt_description': {'required': True, 'type': 'string', 'min':5,'empty': False, 'minlength':5},
+            'pdt_category': {'required': True, 'type': 'string', 'empty': False, 'minlength':2},
+        }
+    v = Validator(schema)
+    if not v(new_product):
+            return "Check your input values.\n -Product_name*: Required, must be a string and minlength : 2 characters\n -pdt_description* : Required, must be a string and minlength : 5 characters\n -Pdt_category* : Required , must be a string and minlength : 2 characters", 400
+    
+
     new_product_return = Product.add_product(new_product['product_name'],
                                              new_product['pdt_description'],
                                              new_product['pdt_category'])
+
+
+    # product_name = request.json['product_name']
+    # pdt_description = request.json['pdt_description']
+    # pdt_category = request.json['pdt_category']
+    # if product_name == "" or pdt_description == "" or pdt_category == "":
+    #     return "Everyfield is mandatory*"
+    
+
+    # new_product_return = Product.add_product(product_name,
+    #                                          pdt_description,
+    #                                          pdt_category
+                                            #  )
     if new_product_return == "Product already exists":
         return jsonify({403 : new_product_return}), 403
     return jsonify({201: 'Product successfully added'}), 201
