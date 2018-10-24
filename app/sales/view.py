@@ -12,10 +12,8 @@ def get_sales():
 @app.route('/api/v1/sales/<int:sales_id>', methods=['GET'])
 def get_sale(sales_id):
     """This method gets a specific sale using the sale’s id"""
-    if isinstance(Sale.find_sale_by_id(sales_id), dict):
+    if isinstance(Sale.find_sale_by_id(sales_id), list):
         return jsonify(Sale.find_sale_by_id(sales_id)), 200
-    # if Sale.find_sale_by_id(sales_id) == []:
-    #     return "Id doesnot exist"
     return jsonify({404: Sale.find_sale_by_id(sales_id)}), 404
 
 @app.route('/api/v1/sales', methods=['POST'])
@@ -64,6 +62,6 @@ def change_sale(sales_id):
 @app.route('/api/v1/sales/<int:sale_id>', methods=['DELETE'])
 def delete_sale(sale_id):
     """"This method deletes a sale using the sale id"""
-    if isinstance(Sale.find_sale_by_id(sale_id), dict):
+    if isinstance(Sale.find_sale_by_id(sale_id), list):
         return jsonify({200:Sale.delete_sale(sale_id)}), 200
     return jsonify({404: Sale.find_sale_by_id(sale_id)}), 404
