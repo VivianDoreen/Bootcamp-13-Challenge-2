@@ -5,7 +5,7 @@ from app import app
 
 class MyTestCase(unittest.TestCase):
     sale={
-            "date": 'Friday.October.2018',
+            "date": 'Wednesday.October.2018',
             "sales_id":1,
             "product_code" : 12333,
             "product_name" : "Cups",
@@ -14,6 +14,16 @@ class MyTestCase(unittest.TestCase):
             "unit_price" : 2000,
             "total_price" : 70000
         }
+    all_list = [{
+                "date": 'Wednesday.October.2018',
+                "sales_id":1,
+                "product_code" : 12333,
+                "product_name" : "Cups",
+                "unit_measure" : "pieces",
+                "quantity" : 2,
+                "unit_price" : 2000,
+                "total_price" : 70000
+                }]
     sale_with_missing_parameters={
                                   "product_name" : "Cups",
                                   "unit_measure" : "pieces",
@@ -49,16 +59,7 @@ class MyTestCase(unittest.TestCase):
                         )
         result = self.client.get('/api/v1/sales')
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(json.loads(result.data.decode()), {'200': [{
-                                                            "date": 'Friday.October.2018',
-                                                            "sales_id":1,
-                                                            "product_code" : 12333,
-                                                            "product_name" : "Cups",
-                                                            "unit_measure" : "pieces",
-                                                            "quantity" : 2,
-                                                            "unit_price" : 2000,
-                                                            "total_price" : 70000
-                                                            }]})
+        self.assertEqual(json.loads(result.data.decode()), {'200': self.all_list})
         self.client.delete('/api/v1/sales/1')
 
     def test_get_single_sales_that_does_not_exist(self):
@@ -81,15 +82,7 @@ class MyTestCase(unittest.TestCase):
                         )
         result = self.client.get('/api/v1/sales/1')
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(json.loads(result.data.decode()), {"date": 'Friday.October.2018',
-                                                            "sales_id":1,
-                                                            "product_code" : 12333,
-                                                            "product_name" : "Cups",
-                                                            "unit_measure" : "pieces",
-                                                            "quantity" : 2,
-                                                            "unit_price" : 2000,
-                                                            "total_price" : 70000
-                                                            })
+        self.assertEqual(json.loads(result.data.decode()), [self.sale])
         self.client.delete('/api/v1/sales/1')
 
     def test_add_sale_without_some_params(self):

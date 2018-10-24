@@ -2,16 +2,26 @@ import unittest
 import json
 from app.products import view
 from app import app
+from cerberus import Validator
 
 class MyTestCase(unittest.TestCase):
     product={
-            "date":'Friday.October.2018',
-            "product_name":"Socks" ,
-            "pdt_description": "Green",
-            "pdt_category": "Table",
-            "product_code":1
-        }
-        
+             "product_name": "Nanuscripts books",
+             "pdt_description":"Blue",
+             "pdt_category":"Books"
+            }
+    null_value_product={
+             "product_name": "",
+             "pdt_description":"",
+             "pdt_category":""
+            }
+    data_to_test = {
+                 "date": "Wednesday.October.2018",
+                 "pdt_category": "Books",
+                 "pdt_description": "Blue",
+                 "product_code": 1,
+                 "product_name": "Nanuscripts books"
+                }
     product_with_missing_parameters = {
                                         "date":"Fri, 28 Sep 2018 00:00:00 GMT",
                                         "product_code":2,
@@ -40,21 +50,16 @@ class MyTestCase(unittest.TestCase):
         result = self.client.get('/api/v1/products')
         self.assertEqual(result.status_code, 200)
         self.assertEqual(json.loads(result.data.decode()), {'200': 'No products available'})
-
+    
     def test_list_with_products(self):
         self.client.post('/api/v1/products',
                         content_type='application/json',
                         data=json.dumps(self.product)
                         )
         result = self.client.get('/api/v1/products')
+        print(result)
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(json.loads(result.data.decode()), {'200': [{
-                                                            "date":"Friday.October.2018",
-                                                            "product_code":1,
-                                                            "product_name":"Socks" ,
-                                                            "pdt_description": "Green",
-                                                            "pdt_category": "Table"
-                                                        }]})
+        self.assertEqual(json.loads(result.data.decode()), {'200': [self.data_to_test]})
         self.client.delete('/api/v1/products/1')
 
     def test_get_single_product_that_does_not_exist(self):
@@ -77,14 +82,34 @@ class MyTestCase(unittest.TestCase):
                         )
         result = self.client.get('/api/v1/products/1')
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(json.loads(result.data.decode()), {"date":"Friday.October.2018",
-                                                            "product_code":1,
-                                                            "product_name":"Socks" ,
-                                                            "pdt_description": "Green",
-                                                            "pdt_category": "Table"
-                                                            })
+        self.assertEqual(json.loads(result.data.decode()), [self.data_to_test])
         self.client.delete('/api/v1/products/1')
-        
+
+    def test_add_null_value_for_product(self):
+        """ Should return product not found, Wrong params for json"""
+        response = self.client.post('/api/v1/products',
+                                    content_type='application/json',
+                                    data=json.dumps(self.null_value_product)
+                                    )
+        self.assertEqual("Check your input values."
+                    "\n Product_name*:, "
+                    " \n\t\t\t\t- Required"
+                    "\n\t\t\t\t- Must be a string, "
+                    "\n\t\t\t\t- Minlength: 2 characters"
+                    "\n\t\t\t\t- Must begin with a character"
+                    "\n Pdt_description*"
+                    "\n\t\t\t\t- Required"
+                    "\n\t\t\t\t- Must be a string"
+                    "\n\t\t\t\t- Minlength : 2 characters"
+                    "\n\t\t\t\t- Must begin with a character"
+                    "\n -Pdt_category* "
+                    "\n\t\t\t\t- Required"
+                    "\n\t\t\t\t- Must be a string "
+                    "\n\t\t\t\t- Minlength : 2 characters"
+                    "\n\t\t\t\t- Must begin with a character", response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.client.delete('/api/v1/products/1')
+
     def test_add_product_without_some_params(self):
         """ Should return product not found, Wrong params for json"""
         response = self.client.post('/api/v1/products',
