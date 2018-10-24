@@ -32,14 +32,43 @@ def create_product():
     new_product = request.get_json() or {}
 
     schema = {
-            'product_name': {'required': True, 'type': 'string','empty': False, 'regex': '[a-zA-Z]{2,20}'},
-            'pdt_description': {'required': True, 'type': 'string','empty': False, 'minlength':2, 'regex': '[a-zA-Z]+'},
-            'pdt_category': {'required': True, 'type': 'string', 'empty': False, 'minlength':2, 'regex': '[a-zA-Z]+'},
-        }
+                'product_name': {
+                                'required': True,
+                                'type': 'string',
+                                'empty': False,
+                                'regex': r'^[a-zA-Z]{2,18}(?:[\s_-]{1}[a-zA-Z]+)*$'
+                                },
+                'pdt_description': {
+                                'required': True,
+                                'type': 'string',
+                                'empty': False,
+                                'minlength':2,
+                                'regex': r'^[a-zA-Z].*[\s.]*$'},
+                'pdt_category': {
+                                'required': True,
+                                'type': 'string',
+                                'empty': False,
+                                'minlength':2,
+                                'regex': r'^[a-zA-Z].*[\s.]*$'}
+            }
     v = Validator(schema)
     if not v(new_product):
-            return "Check your input values.\n -Product_name*: Required, must be a string and minlength : 2 characters\n -pdt_description* : Required, must be a string and minlength : 5 characters\n -Pdt_category* : Required , must be a string and minlength : 2 characters", 400
-    
+            return ("Check your input values."
+                    "\n Product_name*:, "
+                    " \n\t\t\t\t- Required"
+                    "\n\t\t\t\t- Must be a string, "
+                    "\n\t\t\t\t- Minlength: 2 characters"
+                    "\n\t\t\t\t- Must begin with a character"
+                    "\n Pdt_description*"
+                    "\n\t\t\t\t- Required"
+                    "\n\t\t\t\t- Must be a string"
+                    "\n\t\t\t\t- Minlength : 2 characters"
+                    "\n\t\t\t\t- Must begin with a character"
+                    "\n -Pdt_category* "
+                    "\n\t\t\t\t- Required"
+                    "\n\t\t\t\t- Must be a string "
+                    "\n\t\t\t\t- Minlength : 2 characters"
+                    "\n\t\t\t\t- Must begin with a character"), 400
 
     new_product_return = Product.add_product(new_product['product_name'],
                                              new_product['pdt_description'],
