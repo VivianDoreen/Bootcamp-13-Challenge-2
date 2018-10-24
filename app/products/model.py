@@ -33,17 +33,17 @@ class Product:
                                                      product['pdt_category']):
                 return "Product already exists"
             else:
-                product["product_code"] = product["product_code"] + 1
+                product["product_code"] += 1
         Product.products_list.append(new_product)
         return new_product
 
     @staticmethod
     def find_product_by_id(product_id):
         """Get a specific product using the product’s code"""
-        for product in Product.products_list:
-            if product_id == product["product_code"]:
-                return product
+        result_list = [product for product in Product.products_list if product['product_code'] == product_id]
+        if result_list == []:
             return Product.invalid_id
+        return result_list
 
     @staticmethod
     def modify_product(product_id, pdt_name, pdt_description, pdt_category):
