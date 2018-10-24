@@ -20,7 +20,7 @@ def get_products():
 @app.route('/api/v1/products/<int:product_id>', methods=['GET'])
 def get_product(product_id):
     """This method gets a specific product using the product’s id"""
-    if isinstance(Product.find_product_by_id(product_id), dict):
+    if isinstance(Product.find_product_by_id(product_id), list):
         return jsonify(Product.find_product_by_id(product_id)), 200
     return jsonify({404: Product.find_product_by_id(product_id)}), 404
 
@@ -98,6 +98,6 @@ def change_product(product_id):
 @app.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
     """"This method deletes a product using the product's id"""
-    if isinstance(Product.find_product_by_id(product_id), dict):
+    if isinstance(Product.find_product_by_id(product_id), list):
         return jsonify({200:Product.delete_product(product_id)}), 200
     return jsonify({404: Product.find_product_by_id(product_id)}), 404
