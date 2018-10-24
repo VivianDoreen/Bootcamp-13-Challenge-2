@@ -32,9 +32,9 @@ def create_product():
     new_product = request.get_json() or {}
 
     schema = {
-            'product_name': {'required': True, 'type': 'string','empty': False, 'minlength':2},
-            'pdt_description': {'required': True, 'type': 'string', 'min':5,'empty': False, 'minlength':5},
-            'pdt_category': {'required': True, 'type': 'string', 'empty': False, 'minlength':2},
+            'product_name': {'required': True, 'type': 'string','empty': False, 'regex': '[a-zA-Z]{2,20}'},
+            'pdt_description': {'required': True, 'type': 'string','empty': False, 'minlength':2, 'regex': '[a-zA-Z]+'},
+            'pdt_category': {'required': True, 'type': 'string', 'empty': False, 'minlength':2, 'regex': '[a-zA-Z]+'},
         }
     v = Validator(schema)
     if not v(new_product):
@@ -45,18 +45,6 @@ def create_product():
                                              new_product['pdt_description'],
                                              new_product['pdt_category'])
 
-
-    # product_name = request.json['product_name']
-    # pdt_description = request.json['pdt_description']
-    # pdt_category = request.json['pdt_category']
-    # if product_name == "" or pdt_description == "" or pdt_category == "":
-    #     return "Everyfield is mandatory*"
-    
-
-    # new_product_return = Product.add_product(product_name,
-    #                                          pdt_description,
-    #                                          pdt_category
-                                            #  )
     if new_product_return == "Product already exists":
         return jsonify({403 : new_product_return}), 403
     return jsonify({201: 'Product successfully added'}), 201
