@@ -48,18 +48,17 @@ class Sale:
                                             ):
                 return "Sale already exists"
             else:
-                sale["sale_id"] = sale["sale_id"] + 1
+                sale["sales_id"] += 1
         Sale.sales_record.append(new_sale)
         return new_sale
 
     @staticmethod
     def find_sale_by_id(sale_id):
         """Get a specific product using the product’s code"""
-        for sale in Sale.sales_record:
-            if sale_id == sale["sales_id"]:
-                return sale
+        result_sale = [sale for sale in Sale.sales_record if sale["sales_id"] == sale_id]
+        if result_sale == []:                
             return Sale.invalid_id
-
+        return result_sale
     @staticmethod
     def modify_sale(sales_id, product_code, pdt_name, unit_measure, quantity, unit_price, total_price):
         """Modify a specific sale using the sale id"""
