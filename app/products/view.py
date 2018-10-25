@@ -66,18 +66,6 @@ def change_product(product_id):
                                     new_product['pdt_description'],
                                     new_product['pdt_category']
                                 )})
-    # if (Product.modify_product(
-    #                            product_id,
-    #                            new_product['product_name'],
-    #                            new_product['pdt_description'],
-    #                            new_product['pdt_category']) == 
-    #                                                           'Product not found,' 
-    #                                                           'please check id'):
-    #     return jsonify({404: 'Product not found, please check id'}), 404
-
-    # modified_product = Product.modify_product(product_id, new_product['product_name'],
-    #                        new_product['pdt_description'], new_product['pdt_category'])
-    # return jsonify({201: 'Product has been modified successfully'}), 201
 
 @app.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
