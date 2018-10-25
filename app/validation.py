@@ -24,3 +24,4 @@ class ValidateInput:
                                     'regex': r'^[a-zA-Z].*[\s.]*$'}
                 }
         return Validator(schema)
+        
