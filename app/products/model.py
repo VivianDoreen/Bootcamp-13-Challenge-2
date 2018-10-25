@@ -66,24 +66,10 @@ class Product:
                      ]
         if product_result == []:
             abort(404)
-        
-        modified_product = {
-                            "product_name" : pdt_name,
-                            "pdt_description" : pdt_description,
-                            "pdt_category" : pdt_category
-                            }
-
-        for product in Product.products_list:
-            if (modified_product['product_name'],
-                    modified_product['pdt_description'],
-                    modified_product['pdt_category']) == (product['product_name'],
-                                                     product['pdt_description'],
-                                                     product['pdt_category']):
-                abort(409)
-        
-            product_result[0]["product_name"] = pdt_name
-            product_result[0]["pdt_description"] = pdt_description
-            product_result[0]["pdt_category"] = pdt_category
+  
+        product_result[0]["product_name"] = pdt_name
+        product_result[0]["pdt_description"] = pdt_description
+        product_result[0]["pdt_category"] = pdt_category
         return product_result
         
     @staticmethod
