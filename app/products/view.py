@@ -50,7 +50,7 @@ def create_product():
                                              new_product['pdt_category']
                                             )
     if new_product_return:
-        return jsonify({"message":"Product successfully added"})
+        return jsonify({"message":new_product_return}), 201
     return jsonify({'message': new_product_return})
 
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
@@ -65,11 +65,10 @@ def change_product(product_id):
                                     new_product['product_name'],
                                     new_product['pdt_description'],
                                     new_product['pdt_category']
-                                )})
+                                )}), 201
 
 @app.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
     """"This method deletes a product using the product's id"""
     if isinstance(Product.find_product_by_id(product_id), list):
-        return jsonify({200:Product.delete_product(product_id)}), 200
-    return jsonify({404: Product.find_product_by_id(product_id)}), 404
+        return jsonify({"Message":Product.delete_product(product_id)})
