@@ -76,11 +76,14 @@ class Product:
     @staticmethod
     def delete_product(product_id):
         """Delete a specific product using the product’s code"""
-        for product in Product.products_list:
-            if product_id == product['product_code']:
-                Product.products_list.remove(product)
-                return "Product deleted"
+        result_list =[
+                        product for product in 
+                        Product.products_list
+                        if product['product_code'] == product_id
+                     ]
+        if result_list == []:
             abort(404)
+        return "Product deleted"
 
     @staticmethod
     def list_all_products():
