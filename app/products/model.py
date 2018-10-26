@@ -38,7 +38,7 @@ class Product:
             else:
                 product["product_code"] += 1
         Product.products_list.append(new_product)
-        return new_product
+        return "Product successfully added"
 
     @staticmethod
     def find_product_by_id(product_id):
@@ -66,11 +66,12 @@ class Product:
                      ]
         if product_result == []:
             abort(404)
-  
+          
         product_result[0]["product_name"] = pdt_name
         product_result[0]["pdt_description"] = pdt_description
         product_result[0]["pdt_category"] = pdt_category
-        return product_result
+
+        return 'Product has been modified successfully'
         
     @staticmethod
     def delete_product(product_id):
@@ -79,7 +80,6 @@ class Product:
             if product_id == product['product_code']:
                 Product.products_list.remove(product)
                 return "Product deleted"
-            
             abort(404)
 
     @staticmethod
