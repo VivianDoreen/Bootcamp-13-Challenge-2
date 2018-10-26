@@ -7,15 +7,6 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 
-addons:
-  code_climate:
-    repo_token:
-      secure: "JJ"
-before_script:  # code coverage tool
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-
 # command to run tests
 script: 
   - python3 -m pytest --cov=app
