@@ -5,10 +5,6 @@ from app import app
 def wrong_param(error):
     return make_response(jsonify({'product not found':'Wrong params for json'}), 400)
 
-@app.errorhandler(405)
-def wrong_url(error):
-    return make_response(jsonify({'Method not allowed':'Try Again'}), 405)
-
 @app.errorhandler(409)
 def already_exists(error):
     return make_response(jsonify({'Message' : 'Product already exists'}), 409)
