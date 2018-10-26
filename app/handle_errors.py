@@ -3,7 +3,7 @@ from app import app
 
 @app.errorhandler(400)
 def wrong_param(error):
-    return make_response(jsonify({'product not found':' Wrong params for json'}), 400)
+    return make_response(jsonify({'product not found':'Wrong params for json'}), 400)
 
 @app.errorhandler(409)
 def already_exists(error):
@@ -11,7 +11,7 @@ def already_exists(error):
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'product not found':' please check id'}), 404)
+    return make_response(jsonify({'product not found':'please check id'}), 404)
 
 @app.errorhandler(422)
 def wrong_input(error):
