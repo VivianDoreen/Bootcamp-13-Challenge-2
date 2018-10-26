@@ -18,7 +18,7 @@ before_script:  # code coverage tool
 
 # command to run tests
 script: 
-  - python3 -m pytest --cov=app
+  - python3 -m pytest --cov
 
 after_script:
   - coverage xml
