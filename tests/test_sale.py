@@ -5,7 +5,7 @@ from app import app
 
 class MyTestCase(unittest.TestCase):
     sale={
-            "date": 'Wednesday.October.2018',
+            "date": 'Thursday.October.2018',
             "sales_id":1,
             "product_code" : 12333,
             "product_name" : "Cups",
@@ -15,7 +15,7 @@ class MyTestCase(unittest.TestCase):
             "total_price" : 70000
         }
     all_list = [{
-                "date": 'Wednesday.October.2018',
+                "date": 'Thursday.October.2018',
                 "sales_id":1,
                 "product_code" : 12333,
                 "product_name" : "Cups",
@@ -91,7 +91,7 @@ class MyTestCase(unittest.TestCase):
                                     content_type='application/json',
                                     data=json.dumps(self.sale_with_missing_parameters)
                                     )
-        self.assertEqual({'product not found':' Wrong params for json'}, json.loads(response.data.decode()))
+        self.assertEqual({'product not found':'Wrong params for json'}, json.loads(response.data.decode()))
         self.assertEqual(response.status_code, 400)
         self.client.delete('/api/v1/sales/1')
 
