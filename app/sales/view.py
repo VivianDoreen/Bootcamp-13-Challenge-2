@@ -55,7 +55,7 @@ def create_sale():
             "\n\t\t\t\t- Must be an integer "
             "\n\t\t\t\t- Minlength : 2 characters"
             "\n\t\t\t\t- Must begin with a number"
-             ), 403
+             ), 409
     new_sale_return = Sale.add_sale(new_sale['product_code'],
                                     new_sale['product_name'],
                                     new_sale['unit_measure'],

@@ -40,7 +40,14 @@ class MyTestCase(unittest.TestCase):
                     "unit_price" : 2000,
                     "total_price" : 70000
                     }
-    
+    null_value_sale={
+                    "product_code" : "",
+                    "product_name" : "",
+                    "unit_measure" : "",
+                    "quantity" : "",
+                    "unit_price" : "",
+                    "total_price" : ""
+    }
     def setUp(self):
         self.client = app.test_client()
     
@@ -83,6 +90,41 @@ class MyTestCase(unittest.TestCase):
                         )
         result = self.client.get('/api/v1/sales/1')
         self.assertEqual(result.status_code, 200)
+        self.client.delete('/api/v1/sales/1')
+
+    def test_add_null_value_for_sale(self):
+        response = self.client.post('/api/v1/sales',
+                                    content_type='application/json',
+                                    data=json.dumps(self.null_value_sale)
+                                    )
+        self.assertEqual(
+                            "Check your input values."
+                            "\n Product_name*"
+                            " \n\t\t\t\t- Required"
+                            "\n\t\t\t\t- Must be a string, "
+                            "\n\t\t\t\t- Minlength: 2 characters"
+                            "\n\t\t\t\t- Must begin with a character"
+                            "\n unit_measure*"
+                            "\n\t\t\t\t- Required"
+                            "\n\t\t\t\t- Must be a string"
+                            "\n\t\t\t\t- Must begin with a character"
+                            "\n -quantity* "
+                            "\n\t\t\t\t- Required"
+                            "\n\t\t\t\t- Must be an integer "
+                            "\n\t\t\t\t- Minlength : 2 characters"
+                            "\n\t\t\t\t- Must begin with a number"
+                            "\n -unit_price* "
+                            "\n\t\t\t\t- Required"
+                            "\n\t\t\t\t- Must be an integer "
+                            "\n\t\t\t\t- Minlength : 2 characters"
+                            "\n\t\t\t\t- Must begin with a number"
+                            "\n -total_price* "
+                            "\n\t\t\t\t- Required"
+                            "\n\t\t\t\t- Must be an integer "
+                            "\n\t\t\t\t- Minlength : 2 characters"
+                            "\n\t\t\t\t- Must begin with a number"
+            , response.data.decode())
+        self.assertEqual(response.status_code, 409)
         self.client.delete('/api/v1/sales/1')
 
     def test_add_sale_without_some_params(self):
