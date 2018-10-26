@@ -3,6 +3,9 @@ import json
 from app.products import view
 from app import app
 from cerberus import Validator
+from datetime import datetime
+
+date = datetime.now()
 
 class MyTestCase(unittest.TestCase):
     def setUp(self):
@@ -20,7 +23,7 @@ class MyTestCase(unittest.TestCase):
              "pdt_category":""
             })
         self.data_to_test = {
-                    "date": "Thursday.October.2018",
+                    "date": date.strftime('%A.%B.%Y'),
                     "pdt_category": "Books",
                     "pdt_description": "Blue",
                     "product_code": 1,

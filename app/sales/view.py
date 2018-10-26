@@ -3,6 +3,7 @@ from flask import jsonify, request, abort, make_response
 from app import app
 from app.sales.model import Sale
 from app import handle_errors
+from app.validation import ValidateInput
 
 @app.route('/api/v1/sales', methods=['GET'])
 def get_sales():
@@ -19,9 +20,42 @@ def get_sale(sales_id):
 @app.route('/api/v1/sales', methods=['POST'])
 def create_sale():
     """This methods creates a new product record"""
-    if not request.json or not 'product_code' in request.json or not 'product_name' in request.json or not 'unit_measure' in request.json or not 'quantity' in request.json or not 'unit_price' in request.json or not 'total_price' in request.json:
+    if (not request.json or not 'product_code'in request.json
+                         or not 'product_name' in request.json
+                         or not 'unit_measure' in request.json
+                         or not 'quantity' in request.json
+                         or not 'unit_price' in request.json
+                         or not 'total_price' in request.json):
         abort(400)
     new_sale = request.get_json() or {}
+    validate = ValidateInput.validate_input_sales()
+    if not validate(new_sale):
+        return make_response("Check your input values."
+            "\n Product_name*"
+            " \n\t\t\t\t- Required"
+            "\n\t\t\t\t- Must be a string, "
+            "\n\t\t\t\t- Minlength: 2 characters"
+            "\n\t\t\t\t- Must begin with a character"
+            "\n unit_measure*"
+            "\n\t\t\t\t- Required"
+            "\n\t\t\t\t- Must be a string"
+            "\n\t\t\t\t- Must begin with a character"
+            "\n -quantity* "
+            "\n\t\t\t\t- Required"
+            "\n\t\t\t\t- Must be an integer "
+            "\n\t\t\t\t- Minlength : 2 characters"
+            "\n\t\t\t\t- Must begin with a number"
+             "\n -unit_price* "
+            "\n\t\t\t\t- Required"
+            "\n\t\t\t\t- Must be an integer "
+            "\n\t\t\t\t- Minlength : 2 characters"
+            "\n\t\t\t\t- Must begin with a number"
+            "\n -total_price* "
+            "\n\t\t\t\t- Required"
+            "\n\t\t\t\t- Must be an integer "
+            "\n\t\t\t\t- Minlength : 2 characters"
+            "\n\t\t\t\t- Must begin with a number"
+             ), 403
     new_sale_return = Sale.add_sale(new_sale['product_code'],
                                     new_sale['product_name'],
                                     new_sale['unit_measure'],

@@ -2,11 +2,12 @@ import unittest
 import json
 from app.sales import view
 from app import app
+from datetime import datetime
+
+date = datetime.now()
 
 class MyTestCase(unittest.TestCase):
     sale={
-            "date": 'Thursday.October.2018',
-            "sales_id":1,
             "product_code" : 12333,
             "product_name" : "Cups",
             "unit_measure" : "pieces",
@@ -15,7 +16,7 @@ class MyTestCase(unittest.TestCase):
             "total_price" : 70000
         }
     all_list = [{
-                "date": 'Thursday.October.2018',
+                "date":date.strftime('%A.%B.%Y'),
                 "sales_id":1,
                 "product_code" : 12333,
                 "product_name" : "Cups",
@@ -82,7 +83,6 @@ class MyTestCase(unittest.TestCase):
                         )
         result = self.client.get('/api/v1/sales/1')
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(json.loads(result.data.decode()), [self.sale])
         self.client.delete('/api/v1/sales/1')
 
     def test_add_sale_without_some_params(self):
